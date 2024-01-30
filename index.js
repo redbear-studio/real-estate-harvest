@@ -1,6 +1,6 @@
 import puppeteer from "puppeteer";
 
-const getQuotes = async () => {
+const getPropertyData = async () => {
   // Start a Puppeteer session with:
   // - a visible browser (`headless: false` - easier to debug because you'll see the browser in action)
   // - no default viewport (`defaultViewport: null` - website page will be in full width and height)
@@ -15,30 +15,25 @@ const getQuotes = async () => {
   // On this new page:
   // - open the "http://quotes.toscrape.com/" website
   // - wait until the dom content is loaded (HTML is ready)
-  await page.goto("http://quotes.toscrape.com/", {
+  await page.goto("https://www.daft.ie/for-sale/detached-house-killough-castle-killough-thurles-co-tipperary/5413440", {
     waitUntil: "domcontentloaded",
   });
 
   // Get page data
-  const quotes = await page.evaluate(() => {
+  const address = await page.evaluate(() => {
     // Fetch the first element with class "quote"
     // Get the displayed text and returns it
-    const quoteList = document.querySelectorAll(".quote");
-
-    // Convert the quoteList to an iterable array
-    // For each quote fetch the text and author
-    return Array.from(quoteList).map((quote) => {
+    const propAddr = document.querySelector(".default_cursor_cs");
+    
       // Fetch the sub-elements from the previously fetched quote element
       // Get the displayed text and return it (`.innerText`)
-      const text = quote.querySelector(".text").innerText;
-      const author = quote.querySelector(".author").innerText;
+    const propertyAddress = propAddr.querySelector(".TitleBlock__Address-sc-1avkvav-8 dzihxK default_cursor_cs").innerText;
 
-      return { text, author };
+    return { propertyAddress };
     });
-  });
 
   // Display the quotes
-  console.log(quotes);
+  console.log(address);
 
   // Click on the "Next page" button
   await page.click(".pager > .next > a");
@@ -48,4 +43,4 @@ const getQuotes = async () => {
 };
 
 // Start the scraping
-getQuotes();
+getPropertyData();
