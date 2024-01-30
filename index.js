@@ -21,14 +21,14 @@ const getPropertyData = async () => {
 
   // Get page data
   const address = await page.evaluate(() => {
-    // Fetch the first element with class "quote"
+    // Fetch the first element with class "default_cursor_cs"
     // Get the displayed text and returns it
     const propAddr = document.querySelector(".default_cursor_cs");
     
-      // Fetch the sub-elements from the previously fetched quote element
-      // Get the displayed text and return it (`.innerText`)
+    // Fetch the sub-elements from the previously fetched quote element
+    // Get the displayed text and return it (`.innerText`)
     const propertyAddress = propAddr.querySelector(".TitleBlock__Address-sc-1avkvav-8 dzihxK default_cursor_cs").innerText;
-
+    
     return { propertyAddress };
     });
 
