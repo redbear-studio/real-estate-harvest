@@ -13,7 +13,7 @@ const getPropertyData = async () => {
   const page = await browser.newPage();
 
   // On this new page:
-  // - open the "http://quotes.toscrape.com/" website
+  // - open the "https://www.daft.ie/for-sale/detached-house-killough-castle-killough-thurles-co-tipperary/5413440" website
   // - wait until the dom content is loaded (HTML is ready)
   await page.goto("https://www.daft.ie/for-sale/detached-house-killough-castle-killough-thurles-co-tipperary/5413440", {
     waitUntil: "domcontentloaded",
