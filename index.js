@@ -1,46 +1,33 @@
-import puppeteer from "puppeteer";
+import puppeteer from 'puppeteer';
 
-const getPropertyData = async () => {
-  // Start a Puppeteer session with:
-  // - a visible browser (`headless: false` - easier to debug because you'll see the browser in action)
-  // - no default viewport (`defaultViewport: null` - website page will be in full width and height)
-  const browser = await puppeteer.launch({
-    headless: false,
-    defaultViewport: null,
-  });
+(async() => {
+    // lunch a new brower instance
+    const browser = await puppeteer.launch({ headless: false })
+    // create a new page handle
+    const page = await browser.newPage()
+    // goto target page
+    await page.goto( 'https://www.daft.ie/for-sale/detached-house-killough-castle-killough-thurles-co-tipperary/5413440' , { timeout: 60000 } )
 
-  // Open a new page
-  const page = await browser.newPage();
+    // select address
+    const headings = await page.$$('h1');
+    for (let index = 0; index < headings.length; index++) {
+        const element = headings[index]
+        const headingText = await page.evaluate(
+            element => element.textContent , 
+            element
+        )
+        console.log("address: "+headingText)
+    }
+    //  select price
+    const headings1 = await page.$$('h2');
+    for (let index = 0; index < headings1.length; index++) {
+        const element1 = headings1[index]
+        const headingText1 = await page.evaluate(
+            element1 => element1.textContent , 
+            element1
+        )
+        console.log("price: "+headingText1)
+    }
 
-  // On this new page:
-  // - open the "https://www.daft.ie/for-sale/detached-house-killough-castle-killough-thurles-co-tipperary/5413440" website
-  // - wait until the dom content is loaded (HTML is ready)
-  await page.goto("https://www.daft.ie/for-sale/detached-house-killough-castle-killough-thurles-co-tipperary/5413440", {
-    waitUntil: "domcontentloaded",
-  });
-
-  // Get page data
-  const address = await page.evaluate(() => {
-    // Fetch the first element with class "default_cursor_cs"
-    // Get the displayed text and returns it
-    const propAddr = document.querySelector(".default_cursor_cs");
-    
-    // Fetch the sub-elements from the previously fetched quote element
-    // Get the displayed text and return it (`.innerText`)
-    const propertyAddress = propAddr.querySelector(".TitleBlock__Address-sc-1avkvav-8 dzihxK default_cursor_cs").innerText;
-    
-    return { propertyAddress };
-    });
-
-  // Display the quotes
-  console.log(address);
-
-  // Click on the "Next page" button
-  await page.click(".pager > .next > a");
-
-  // Close the browser
-  // await browser.close();
-};
-
-// Start the scraping
-getPropertyData();
+    await browser.close()
+})()
