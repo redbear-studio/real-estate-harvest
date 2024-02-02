@@ -9,24 +9,44 @@ import puppeteer from 'puppeteer';
     await page.goto( 'https://www.daft.ie/for-sale/detached-house-killough-castle-killough-thurles-co-tipperary/5413440' , { timeout: 60000 } )
 
     // select address
-    const headings = await page.$$('h1');
-    for (let index = 0; index < headings.length; index++) {
-        const element = headings[index]
-        const headingText = await page.evaluate(
-            element => element.textContent , 
-            element
-        )
-        console.log("address: "+headingText)
-    }
-    //  select price
-    const headings1 = await page.$$('h2');
-    for (let index = 0; index < headings1.length; index++) {
-        const element1 = headings1[index]
-        const headingText1 = await page.evaluate(
-            element1 => element1.textContent , 
-            element1
-        )
-        console.log("price: "+headingText1)
+    const addressElement = await page.$('[data-testid="address"]');
+    const addressText = await page.evaluate(element => element.textContent, addressElement);
+    console.log("address: "+addressText);
+
+    // select price
+    const priceElement = await page.$('[data-testid="price"]');
+    const priceText = await page.evaluate(element => element.textContent, priceElement);
+    console.log("price: "+priceText);
+
+    // select bedrooms
+    const bedElement = await page.$('[data-testid="beds"]');
+    const bedText = await page.evaluate(element => element.textContent, bedElement);
+    console.log("bedroom(s): "+bedText);
+
+    // select bathrooms
+    const bathElement = await page.$('[data-testid="baths"]');
+    const bathText = await page.evaluate(element => element.textContent, bathElement);
+    console.log("bathroom(s): "+bathText);
+
+    // TEST TEST TEST
+    // select floor area 
+    const areaElement = await page.$('[data-testid="floor-area"]');
+    const areaText = await page.evaluate(element => element.textContent, areaElement);
+    console.log("total floor area: "+areaText.replace(" m²",""));
+
+    // select description
+    const descriptionElement = await page.$('[data-testid="description"]');
+    const descriptionText = await page.evaluate(element => element.textContent, descriptionElement);
+    console.log("description: "+descriptionText);
+
+    // select features
+    const featureElement = await page.evaluate(() => {
+        const ulElement = Array.from(document.querySelectorAll('ul.PropertyDetailsList__PropertyDetailsListContainer-sc-1cjwtjz-0 li.PropertyDetailsList__PropertyDetailsListItem-sc-1cjwtjz-1'));
+        return ulElement.map(item => item.innerText);
+    });
+
+    for (let i = 0; i < featureElement.length; i++) {
+        console.log(featureElement[i]);
     }
 
     await browser.close()
