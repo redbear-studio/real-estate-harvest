@@ -1,12 +1,17 @@
 import puppeteer from 'puppeteer';
 
+// original attempt
+//const pagetoscrape = 'https://www.daft.ie/for-sale/detached-house-killough-castle-killough-thurles-co-tipperary/5413440';
+// first test
+const pagetoscrape = 'https://www.daft.ie/for-sale/detached-house-the-lodge-oneill-street-clonmel-co-tipperary/3811431';
+
 (async() => {
     // lunch a new brower instance
     const browser = await puppeteer.launch({ headless: false })
     // create a new page handle
     const page = await browser.newPage()
     // goto target page
-    await page.goto( 'https://www.daft.ie/for-sale/detached-house-killough-castle-killough-thurles-co-tipperary/5413440' , { timeout: 60000 } )
+    await page.goto( pagetoscrape , { timeout: 60000 } )
 
     // select address
     const addressElement = await page.$('[data-testid="address"]');
@@ -28,11 +33,12 @@ import puppeteer from 'puppeteer';
     const bathText = await page.evaluate(element => element.textContent, bathElement);
     console.log("bathroom(s): "+bathText);
 
-    // TEST TEST TEST
+    
     // select floor area 
     const areaElement = await page.$('[data-testid="floor-area"]');
     const areaText = await page.evaluate(element => element.textContent, areaElement);
-    console.log("total floor area: "+areaText.replace(" m²",""));
+    console.log("total floor area: "+areaText);
+    // TEST .replace(" m²","")
 
     // select description
     const descriptionElement = await page.$('[data-testid="description"]');
